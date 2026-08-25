@@ -1,0 +1,268 @@
+html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معاينة الشات بوت الذكي - دليل أهل غزة في مدينتي</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Cairo Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+        .pulse-effect {
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 text-slate-800">
+
+    <!-- الكوبون/النافذة الرئيسية -->
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl flex flex-col h-[93vh] max-h-[850px] overflow-hidden border border-slate-200/80 relative">
+        
+        <!-- الهيدر العلوي -->
+        <header class="bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white p-4 sm:p-5 flex items-center justify-between shadow-lg relative z-10">
+            <div class="flex items-center space-x-3.5 space-x-reverse">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-2xl border border-white/20 shadow-inner">
+                        🇵🇸
+                    </div>
+                    <span class="absolute -bottom-1 -left-1 w-4 h-4 bg-emerald-400 border-2 border-emerald-900 rounded-full"></span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-extrabold text-base sm:text-lg tracking-wide">دليل أهل غزة في مدينتي</h1>
+                        <span id="mode-badge" class="bg-emerald-500/30 text-emerald-200 text-[10px] px-2 py-0.5 rounded-full border border-emerald-400/30 font-medium">وضع العرض</span>
+                    </div>
+                    <p class="text-xs text-emerald-100/90 flex items-center gap-1.5 mt-0.5">
+                        <i class="fa-solid fa-sparkles text-amber-300 text-[10px]"></i>
+                        المساعد الذكي الفوري للإجابة على جميع الاستفسارات
+                    </p>
+                </div>
+            </div>
+
+            <!-- أزرار الإعدادات والإجراءات -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleSettingsModal()" title="إعدادات الـ API" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center border border-white/20 text-white text-sm">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <button onclick="clearChat()" title="مسح المحادثة" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-red-500/30 hover:border-red-400/50 transition flex items-center justify-center border border-white/20 text-white text-sm">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- اقتراحات سريعة للأسئلة -->
+        <div class="bg-emerald-50/70 border-b border-emerald-100/80 px-3 py-2.5 flex items-center gap-2 overflow-x-auto custom-scrollbar shrink-0 text-xs text-slate-600">
+            <span class="text-emerald-800 font-bold shrink-0 flex items-center gap-1">
+                <i class="fa-solid fa-bolt text-amber-500"></i> أسئلة شائعة:
+            </span>
+            <button onclick="sendQuickQuestion('أبي أفضل المطاعم والأكلات الغزاوية في مدينتي')" class="bg-white hover:bg-emerald-600 hover:text-white transition px-3 py-1.5 rounded-full border border-emerald-200 text-slate-700 shrink-0 font-medium shadow-sm">
+                🍲 مطاعم وأكلات غزاوية
+            </button>
+            <button onclick="sendQuickQuestion('أبي أرقام سباكين وفنيين صيانة في مدينتي')" class="bg-white hover:bg-emerald-600 hover:text-white transition px-3 py-1.5 rounded-full border border-emerald-200 text-slate-700 shrink-0 font-medium shadow-sm">
+                🛠️ خدمات صيانة وسباكة
+            </button>
+            <button onclick="sendQuickQuestion('ما هي العيادات والأطباء المتوفرين؟')" class="bg-white hover:bg-emerald-600 hover:text-white transition px-3 py-1.5 rounded-full border border-emerald-200 text-slate-700 shrink-0 font-medium shadow-sm">
+                🩺 أطباء وعيادات
+            </button>
+            <button onclick="sendQuickQuestion('كيف أستطيع إضافة نشاطي التجاري في الدليل؟')" class="bg-white hover:bg-emerald-600 hover:text-white transition px-3 py-1.5 rounded-full border border-emerald-200 text-slate-700 shrink-0 font-medium shadow-sm">
+                ➕ إضافة نشاط بالدليل
+            </button>
+        </div>
+
+        <!-- منطقة الرسائل -->
+        <div id="chat-messages" class="custom-scrollbar flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 bg-slate-50/60">
+            
+            <!-- الرسالة الترحيبية -->
+            <div class="flex items-start gap-3 animate-fade-in">
+                <div class="w-9 h-9 rounded-2xl bg-emerald-700 text-white flex items-center justify-center text-base shrink-0 mt-1 shadow-md">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="bg-white border border-slate-200/90 text-slate-800 p-4 rounded-2xl rounded-tr-none shadow-sm text-sm leading-relaxed max-w-[88%] space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <span class="font-bold text-emerald-800 flex items-center gap-1.5">
+                            مساعد دليل أهل غزة
+                        </span>
+                        <span class="text-[11px] text-slate-400">الآن</span>
+                    </div>
+                    <p class="text-slate-700">
+                        أهلاً وسهلاً بك في المساعد الذكي لـ <strong>دليل أهل غزة في مدينتي</strong> 🇵🇸🤝🇪🇬
+                    </p>
+                    <p class="text-slate-600 text-xs leading-normal">
+                        أنا هنا لإجابة كافة استفساراتك حول الخدمات، المحلات التجارية، الأطباء، والصيانة، وتوصيل طلبات أهلنا في مدينتي.
+                    </p>
+                    <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-200/60 text-xs text-slate-600 space-y-1 mt-2">
+                        <div class="font-semibold text-emerald-700"><i class="fa-solid fa-circle-info ml-1"></i> معلومات المعاينة:</div>
+                        <p>تستخدم حالياً <strong>المُحاكي التفاعلي المباشر</strong>. يمكنك السؤال مباشرة أو تجربة وضع الذكاء الاصطناعي بإدخال مفتاح Gemini API من أيقونة الإعدادات <i class="fa-solid fa-gear"></i> أعلى الصفحة.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- مؤشر الكتابة/الانتظار -->
+        <div id="typing-indicator" class="hidden px-5 py-2 bg-slate-50/80 flex items-center gap-2 text-xs text-emerald-700 shrink-0">
+            <div class="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs">
+                <i class="fa-solid fa-robot animate-spin"></i>
+            </div>
+            <span>جاري البحث في دليل أهل غزة وكتابة الإجابة...</span>
+        </div>
+
+        <!-- منطقة إدخال النص -->
+        <div class="p-3 sm:p-4 bg-white border-t border-slate-200/90 shrink-0">
+            <form id="chat-form" class="flex items-center gap-2">
+                <div class="relative flex-1">
+                    <input 
+                        type="text" 
+                        id="user-input" 
+                        placeholder="اكتب استفسارك هنا (مثال: أين أجد قدرة غزاوية أو فني كهرباء؟)..." 
+                        class="w-full border border-slate-300 focus:border-emerald-600 rounded-2xl px-4 py-3 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition shadow-inner"
+                        autocomplete="off"
+                        required
+                    />
+                    <button type="button" onclick="speechRecognitionSim()" title="إدخال صوتي" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                </div>
+                <button 
+                    type="submit" 
+                    id="send-btn"
+                    class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white px-5 py-3 rounded-2xl transition duration-200 flex items-center justify-center shadow-lg font-medium text-sm gap-2 shrink-0 disabled:opacity-50"
+                >
+                    <span>إرسال</span>
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </form>
+            <div class="flex items-center justify-between mt-2 px-1 text-[11px] text-slate-400">
+                <span>رابط الدليل: <a href="https://ahilgaza.com" target="_blank" class="text-emerald-700 hover:underline">ahilgaza.com</a></span>
+                <span id="api-status-text" class="text-emerald-600 font-medium"><i class="fa-solid fa-check-circle ml-1"></i>وضع العرض التفاعلي نشط</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- نافذة الإعدادات Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-600"></i> إعدادات الذكاء الاصطناعي
+                </h3>
+                <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+                يمكنك ربط الشات بوت بمفتاح <strong>Google Gemini API</strong> المجاني لتحويله لذكاء اصطناعي حي ومباشر يجيب بناءً على بيانات الدليل.
+            </p>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">مفتاح Gemini API Key (اختياري):</label>
+                <input 
+                    type="password" 
+                    id="api-key-input" 
+                    placeholder="AIzaSy..." 
+                    class="w-full border border-slate-300 rounded-xl p-3 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                />
+                <p class="text-[11px] text-slate-400">إذا تركته فارغاً، سيستمر الشات بوت بالعمل في الوضع التفاعلي الذكي المحلي.</p>
+            </div>
+
+            <div class="pt-3 flex gap-2">
+                <button onclick="saveSettings()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                    حفظ التغييرات
+                </button>
+                <button onclick="toggleSettingsModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs transition">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- السكريبت والمنطق البرمجي -->
+    <script>
+        // قاعدة معرفة الدليل المحلية للوضع المحاكي (Demo Mode Knowledge Base)
+        const LOCAL_KNOWLEDGE = [
+            {
+                keywords: ['مطعم', 'مطاعم', 'أكل', 'قدرة', 'شاورما', 'غزاوية', 'طعام', 'فول', 'فلافل'],
+                response: `🍽️ **أبرز المطاعم والأكلات الغزاوية في مدينتي:**<br>
+                1. **مطبخ ومدخنة مدلين الغزاوية:** يقدم أكلات بيتية، قدرة خليلية وغزاوية باللحم/الدجاج، ومسخن بلدي. 📞 01012345678<br>
+                2. **مطعم قدرة وفتة:** متخصص في القدرة الغزاوية بالفرن البلدي والفتة بالثوم والفلفل الأحمر. 📞 01122334455<br>
+                3. **مخبز وبركة البريج:** خبز صاج، كعك أصفر باليانسون، ومناقيش. 📞 01234567890<br><br>
+                🔗 يمكنك الاطلاع على المنيو الكامل عبر موقعنا: <a href="https://ahilgaza.com" target="_blank" class="text-emerald-700 underline font-bold">ahilgaza.com</a>`
+            },
+            {
+                keywords: ['سباك', 'سباكة', 'كهرباء', 'كهربائي', 'صيانة', 'تكييف', 'فني', 'تصلح', 'غسالة', 'ثلاجة'],
+                response: `🛠️ **خدمات الصيانة والحرفيين المعتمدين في مدينتي:**<br>
+                • **أبو أحمد للسباكة الحديثة:** صيانة الفلل والشقق، معالجة التسريبات وتركيب الفلاتر. 📞 01099887766<br>
+                • **المهندس للتكييف والأجهزة:** صيانة شاشات، ثلاجات، وتكييفات بسرعة وتخفيض لأهل الدليل. 📞 01155443322<br>
+                • **فني الكهرباء أبو المجد:** تأسيس وصيانة الديكورات والأعطال الكهربائية. 📞 01277665544`
+            },
+            {
+                keywords: ['طبيب', 'دكتور', 'عيادة', 'أسنان', 'أطفال', 'باطنة', 'علاج طبيعي', 'صيدلية', 'مستشفى'],
+                response: `🩺 **الخدمات الطبية والأطباء في مدينتي:**<br>
+                • **مركز نجا لطب وتجميل الأسنان:** كشف وتنظيف وزراعة بخصومات خاصة لأعضاء الدليل. 📞 01033221100<br>
+                • **عيادة الدكتور أحمد (استشاري أطفال):** عيادات مدينتي التخصصية. 📞 01144556677<br>
+                • **مركز الشفاء للعلاج الطبيعي والتأهيل:** 📞 01288990011`
+            },
+            {
+                keywords: ['إضافة', 'اشترك', 'نشاطي', 'أسجل', 'أضيف', 'موقعي', 'محل'],
+                response: `➕ **طريقة إضافة نشاطك التجاري أو خدمتك في الدليل:**<br>
+                نرحب بجميع أصحاب الأنشطة والخدمات من أهلنا! يمكنك إضافة نشاطك مجاناً عبر القيام بـ:<br>
+                1. زيارة الموقع الرسمي: <a href="https://ahilgaza.com" target="_blank" class="text-emerald-700 underline font-bold">ahilgaza.com</a><br>
+                2. الضغط على زر **"إضافة نشاط جديد"**.<br>
+                3. تعبئة الاسم، رقم التواصل، والتصنيف، وسيتم مراجعته ونشره فوراً.`
+            },
+            {
+                keywords: ['توصيل', 'مشوار', 'سائق', 'تاكسي', 'مدارس', 'باص'],
